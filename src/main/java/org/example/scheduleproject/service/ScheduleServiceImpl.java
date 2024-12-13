@@ -33,8 +33,12 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedules() {
-        return scheduleRepository.findAllSchedules();
+    public List<ScheduleResponseDto> findAllSchedules(String name, String updateAt) {
+        List<ScheduleResponseDto> allSchedules = scheduleRepository.findAllSchedules(name, updateAt);
+        if (allSchedules.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "name not found");
+        }
+        return allSchedules;
     }
 
     @Override
@@ -64,6 +68,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         return schedule;
     }
 
+    @Transactional
     @Override
     public void deleteSuchedule(Long id) {
         int deleteRow = scheduleRepository.deleteSuchedule(id);

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -28,9 +29,9 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public List<ScheduleResponseDto> findAllSchedules() {
+    public List<ScheduleResponseDto> findAllSchedules(@RequestParam(required = false) String name, @RequestParam(required = false) String updateAt) {
 
-        return scheduleService.findAllSchedules();
+        return scheduleService.findAllSchedules(name,updateAt);
     }
 
     @GetMapping("/{id}")

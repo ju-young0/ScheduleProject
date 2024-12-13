@@ -46,8 +46,20 @@ public class JdbcTemplateRepository implements ScheduleRepository{
 
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedules() {
-        return jdbcTemplate.query("select * from schedule", scheduleRowMapper());
+    public List<ScheduleResponseDto> findAllSchedules(String name, String updateAt) {
+        String sql = "select * from schedule where 1 = 1 ";
+        List<Object> param = new ArrayList<>();
+        if (name != null && !name.isEmpty()) {
+            sql+= "and name = ? ";
+            param.add(name);
+        }
+        if (updateAt != null && !updateAt.isEmpty()) {
+            sql+= "and date(updatedAt) = ? ";
+            param.add(updateAt);
+        }
+        sql+= "order by updatedAt desc";
+
+        return jdbcTemplate.query(sql,param.toArray(), scheduleRowMapper());
     }
 
     public Optional<ScheduleResponseDto> findingScheduleId(Long id) {
